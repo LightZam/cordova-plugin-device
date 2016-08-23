@@ -68,11 +68,11 @@
         [userDefaults setObject:app_uuid forKey:UUID_KEY];
         [userDefaults synchronize];
         [UICKeyChainStore setString:app_uuid forKey:UUID_KEY];
-    } else if ( keychain_uuid && app_uuid == nil) {
+    } else if (keychain_uuid && app_uuid == nil) {
         [userDefaults setObject:keychain_uuid forKey:UUID_KEY];
         [userDefaults synchronize];
         app_uuid = keychain_uuid;
-    } else if ( ![keychain_uuid isEqualToString:app_uuid] ) {
+    } else if (![keychain_uuid isEqualToString:app_uuid]) {
         [UICKeyChainStore setString:app_uuid forKey:UUID_KEY];
     }
 
