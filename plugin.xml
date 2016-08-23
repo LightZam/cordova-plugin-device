@@ -75,7 +75,7 @@
 
         <source-file src="src/android/Device.java" target-dir="src/org/apache/cordova/device" />
     </platform>
-    
+
     <!-- ubuntu -->
     <platform name="ubuntu">
         <header-file src="src/ubuntu/device.h" />
@@ -95,6 +95,9 @@
 
         <header-file src="src/ios/CDVDevice.h" />
         <source-file src="src/ios/CDVDevice.m" />
+        <header-file src="src/ios/UICKeyChainStore.h" />
+        <source-file src="src/ios/UICKeyChainStore.m" />
+        <framework src="Security.framework" />
     </platform>
 
     <!-- blackberry10 -->

@@ -23,6 +23,7 @@
 
 #import <Cordova/CDV.h>
 #import "CDVDevice.h"
+#import "UICKeyChainStore.h"
 
 @implementation UIDevice (ModelVersion)
 
@@ -50,11 +51,12 @@
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     static NSString* UUID_KEY = @"CDVUUID";
-    
+
     // Check user defaults first to maintain backwards compaitibility with previous versions
     // which didn't user identifierForVendor
     NSString* app_uuid = [userDefaults stringForKey:UUID_KEY];
-    if (app_uuid == nil) {
+    NSString* keychain_uuid = [UICKeyChainStore stringForKey:UUID_KEY];
+    if (app_uuid == nil && keychain_uuid == nil) {
         if ([device respondsToSelector:@selector(identifierForVendor)]) {
             app_uuid = [[device identifierForVendor] UUIDString];
         } else {
@@ -65,8 +67,15 @@
 
         [userDefaults setObject:app_uuid forKey:UUID_KEY];
         [userDefaults synchronize];
+        [UICKeyChainStore setString:app_uuid forKey:UUID_KEY];
+    } else if ( keychain_uuid && app_uuid == nil) {
+        [userDefaults setObject:keychain_uuid forKey:UUID_KEY];
+        [userDefaults synchronize];
+        app_uuid = keychain_uuid;
+    } else if ( ![keychain_uuid isEqualToString:app_uuid] ) {
+        [UICKeyChainStore setString:app_uuid forKey:UUID_KEY];
     }
-    
+
     return app_uuid;
 }
 
